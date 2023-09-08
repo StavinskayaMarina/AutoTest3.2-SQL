@@ -1,22 +1,21 @@
 import data.DataHelper;
 import data.SQLHelper;
 import page.LoginPage;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-
 
 import static com.codeborne.selenide.Selenide.open;
 
 public class MySQLTest {
 
-
     @AfterAll
-    static void clearBase(){
+    static void clearBase() {
         SQLHelper.cleanDB();
     }
 
     @Test
-    void loginSuccess() {
+    void successfulLogin() {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var RegUser = DataHelper.getRegisteredUser();
         var verificationPage = loginPage.validLogin(RegUser);
@@ -26,16 +25,15 @@ public class MySQLTest {
     }
 
     @Test
-    void errorNotificationIfLoginWithRandomUser(){
+    void randomUserLogin() {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var RegUser = DataHelper.generateRandomUser();
         loginPage.validLogin(RegUser);
-        //var verificationCode = DataHelper.generateRandomVerificationCode();
         loginPage.verifyErrorNotificationVisible();
     }
 
     @Test
-    void errorVerificationCodeWithSuccessLoginUser() {
+    void invalidVerificationCode() {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var RegUser = DataHelper.getRegisteredUser();
         var verificationPage = loginPage.validLogin(RegUser);
